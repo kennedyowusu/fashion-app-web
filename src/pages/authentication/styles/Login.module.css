@@ -1,39 +1,43 @@
-.login-container {
+.auth-container {
   @apply relative w-full h-screen bg-zinc-900/90;
 }
 
-.login-image {
+.auth-image {
   @apply absolute w-full h-full object-cover mix-blend-overlay;
 }
 
-.login-form {
+.auth-form {
   @apply flex justify-center items-center h-full;
 }
 
-.login-card {
+.auth-card {
   @apply max-w-[400px] mx-auto bg-white p-8 rounded-lg shadow-lg md:w-[450px];
 }
 
-.login-title {
-  @apply text-4xl font-semibold text-center py-4 mb-2;
+.auth-title {
+  @apply text-4xl font-semibold text-center py-4 mb-2 text-[#845007];
 }
 
-.login-label {
+.auth-label {
   @apply text-black mb-1;
 }
 
-.login-input {
-  @apply border relative bg-gray-100 p-2;
+.auth-input {
+  @apply border relative bg-gray-100 p-2 focus:outline-none focus:ring-2 focus:ring-gray-100 focus:border-transparent rounded-md;
 }
 
-.login-link {
+.auth-error {
+  @apply text-red-500 text-sm;
+}
+
+.auth-link {
   @apply text-right text-gray-500 text-sm mt-2;
 }
 
-.login-button {
-  @apply w-full py-3 mt-4 bg-teal-700 hover:bg-teal-400 relative text-white font-bold;
+.auth-button {
+  @apply w-full py-3 mt-4 bg-[#845007] hover:bg-[#a36910] relative text-white font-bold rounded-lg;
 }
 
-.login-text {
+.auth-text {
   @apply flex text-center text-gray-500 text-sm mt-4 justify-center;
 }
