@@ -35,13 +35,20 @@ const Login = () => {
     (event) => {
       event.preventDefault()
 
+      // check if inputs are not empty
+      if (!email || !password) {
+        setEmailError(email ? '' : 'Email is required')
+        setPasswordError(password ? '' : 'Password is required')
+        return
+      }
+
       setEmail('')
       setPassword('')
 
       if (formIsValid) {
-        setLoading(true) // set loading to true when login button is clicked
+        setLoading(true)
         dispatch(loginUser({ email, password })).then((response) => {
-          setLoading(false) // set loading to false when login request completes
+          setLoading(false)
           if (response.payload && response.payload.access_token) {
             localStorage.setItem('token', response.payload.access_token)
             navigate('/')
@@ -55,7 +62,15 @@ const Login = () => {
         console.log('Form is not valid')
       }
     },
-    [dispatch, email, password, formIsValid, navigate]
+    [
+      dispatch,
+      email,
+      password,
+      formIsValid,
+      navigate,
+      setEmailError,
+      setPasswordError,
+    ]
   )
 
 
