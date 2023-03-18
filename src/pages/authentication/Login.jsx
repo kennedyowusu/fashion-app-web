@@ -1,53 +1,60 @@
-import React, { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { loginUser } from '../../redux/slices/authentication/login'
+import AuthInputField from '../authentication/auth-components/Input'
+import AuthenticationButton from '../authentication/auth-components/AuthButton'
 import bgImage from '../../assets/images/bg.jpg'
 import styles from '../authentication/styles/Login.module.css'
-import AuthenticationButton from './auth-components/AuthButton'
-import AuthInputField from './auth-components/Input'
-import { Link } from 'react-router-dom'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [formErrors, setFormErrors] = useState({})
-  const [formIsValid, setFormIsValid] = useState(false)
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const validateForm = () => {
-    let errors = {}
-    let isValid = true
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-    if (!email) {
-      errors.email = 'Email is required'
-      isValid = false
-    }
+  const formIsValid = useMemo(() => {
+    return !emailError && !passwordError
+  }, [emailError, passwordError])
 
-    if (!password) {
-      errors.password = 'Password is required'
-      isValid = false
-    }
+  const handleEmailChange = useCallback((event) => {
+    setEmail(event.target.value)
+    setEmailError(event.target.value ? '' : 'Email is required')
+  }, [])
 
-    setFormErrors(errors)
-    setFormIsValid(isValid)
+  const handlePasswordChange = useCallback((event) => {
+    setPassword(event.target.value)
+    setPasswordError(event.target.value ? '' : 'Password is required')
+  }, [])
 
-    return isValid
-  }
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+      if (formIsValid) {
+        setLoading(true) // set loading to true when login button is clicked
+        dispatch(loginUser({ email, password })).then((response) => {
+          setLoading(false) // set loading to false when login request completes
+          if (response.payload && response.payload.access_token) {
+            localStorage.setItem('token', response.payload.access_token)
+            navigate('/')
+          } else if (response.payload && response.payload.message) {
+            console.log(response.payload.message)
+          } else {
+            console.log('Invalid response')
+          }
+        })
+      } else {
+        console.log('Form is not valid')
+      }
+    },
+    [dispatch, email, password, formIsValid, navigate]
+  )
 
-    if (validateForm()) {
-      // Do something with the form data
-    } else {
-      console.log('Form is invalid')
-    }
-  }
-
- const handleEmailChange = (event) => {
-   setEmail(event.target.value)
- }
-
- const handlePasswordChange = (event) => {
-   setPassword(event.target.value)
- }
 
   return (
     <div className={styles['auth-container']}>
@@ -58,34 +65,38 @@ const Login = () => {
       />
       <div className={styles['auth-form']}>
         <form onSubmit={handleSubmit} className={styles['auth-card']}>
-          <h2 className={styles['auth-title']}>Welcome</h2>
-          <AuthInputField
-            label='Email Address'
-            type='email'
-            name='email'
-            id='email'
-            value={email}
-            onChange={handleEmailChange}
+          <h2 className={styles['auth-title']}>Login into your Account</h2>
+          <div>
+            <label htmlFor='email'>Email Address</label>
+            <AuthInputField
+              type='email'
+              name='email'
+              id='email'
+              value={email}
+              onChange={handleEmailChange}
+            />
+            {emailError && (
+              <span className={styles['auth-error']}>{emailError}</span>
+            )}
+          </div>
+          <div>
+            <label htmlFor='password'>Password</label>
+            <AuthInputField
+              type='password'
+              name='password'
+              id='password'
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            {passwordError && (
+              <span className={styles['auth-error']}>{passwordError}</span>
+            )}
+          </div>
+          <AuthenticationButton
+            disabled={!formIsValid}
+            title='Login'
+            loading={loading}
           />
-          {formErrors.password && (
-            <span className={styles['auth-error']}>{formErrors.email}</span>
-          )}
-          <AuthInputField
-            label='Password'
-            type='password'
-            name='password'
-            id='password'
-            value={password}
-            onChange={handlePasswordChange}
-          />
-          {formErrors.password && (
-            <span className={styles['auth-error']}>{formErrors.password}</span>
-          )}
-          <p className={styles['auth-link']}>
-            <Link to='/forgot-password'>Forgot Password?</Link>
-          </p>
-      <AuthenticationButton disabled={!formIsValid}
-        title='Login'/>
           <div className={styles['auth-text']}>
             <p>Don't have an account?</p>
             <p className='ml-2'>

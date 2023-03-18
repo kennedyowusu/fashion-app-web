@@ -73,7 +73,7 @@ const Register = () => {
       />
       <div className={styles['auth-form']}>
         <form onSubmit={handleSubmit} className={styles['auth-card']}>
-          <h2 className={styles['auth-title']}>Welcome</h2>
+          <h2 className={styles['auth-title']}>Create Account</h2>
 
           <AuthInputField
             label='Email Address'
@@ -117,7 +117,7 @@ const Register = () => {
           <div className={styles['auth-text']}>
             <p>Already have an account?</p>
             <p className='ml-2'>
-              <Link to='/login'>login</Link>
+              <Link to='/login'>Login</Link>
             </p>
           </div>
         </form>

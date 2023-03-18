@@ -1,32 +1,50 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: 'http://192.168.1.102:8000/api/',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + localStorage.getItem('token'),
-  },
+  // baseURL: process.env.REACT_APP_API_URL,
+  baseURL: 'http://192.168.1.102:8000/api',
 })
 
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
 // Post Request
-export const post = (url, data) => {
-  return axiosInstance.post(url, data)
+export const post = async (url, data) => {
+  try {
+    const response = await axiosInstance.post(url, data)
+    return response.data
+  } catch (error) {
+    return error.response.data
+  }
 }
 
 // Get Request
 export const get = async (url) => {
-  return await axiosInstance.get(url)
+  try {
+    const response = await axiosInstance.get(url)
+    return response.data
+  } catch (error) {
+    return error.response.data
+  }
 }
 
 // Put Request
 export const put = async (url, data) => {
   try {
     const response = await axiosInstance.put(url, data)
-    if (response.status === 200) {
-      return response.data
-    }
+    return response.data
   } catch (error) {
-    return error.response
+    return error.response.data
   }
 }
 
@@ -34,10 +52,8 @@ export const put = async (url, data) => {
 export const remove = async (url) => {
   try {
     const response = await axiosInstance.delete(url)
-    if (response.status === 200) {
-      return response.data
-    }
+    return response.data
   } catch (error) {
-    return error.response
+    return error.response.data
   }
 }
