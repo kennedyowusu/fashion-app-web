@@ -35,6 +35,9 @@ const Login = () => {
     (event) => {
       event.preventDefault()
 
+      setEmail('')
+      setPassword('')
+
       if (formIsValid) {
         setLoading(true) // set loading to true when login button is clicked
         dispatch(loginUser({ email, password })).then((response) => {
