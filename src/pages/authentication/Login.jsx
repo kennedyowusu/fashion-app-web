@@ -44,20 +44,27 @@ const Login = () => {
 
       setEmail('')
       setPassword('')
+      setLoading(true)
 
       if (formIsValid) {
-        setLoading(true)
-        dispatch(loginUser({ email, password })).then((response) => {
-          setLoading(false)
-          if (response.payload && response.payload.access_token) {
-            localStorage.setItem('token', response.payload.access_token)
-            navigate('/')
-          } else if (response.payload && response.payload.message) {
-            console.log(response.payload.message)
-          } else {
-            console.log('Invalid response')
-          }
-        })
+        dispatch(loginUser({ email, password }))
+          .then((response) => {
+            setLoading(false)
+
+            if (response.payload && response.payload.access_token) {
+              localStorage.setItem('token', response.payload.access_token)
+              navigate('/')
+            } else if (response.payload && response.payload.message) {
+              console.log(response.payload.message)
+            } else {
+              console.log('Invalid response')
+            }
+          })
+          .catch((error) => {
+            setLoading(false)
+            console.log('Error occurred: ', error)
+            // set an error message or handle the error in some other way
+          })
       } else {
         console.log('Form is not valid')
       }
@@ -72,6 +79,7 @@ const Login = () => {
       setPasswordError,
     ]
   )
+
 
 
   return (
