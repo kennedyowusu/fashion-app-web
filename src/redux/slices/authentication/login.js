@@ -77,3 +77,18 @@ export const selectLoginError = (state) => {
 }
 
 export const loginActions = loginSlice.actions
+
+
+/*
+
+This code defines a Redux slice that manages the state of a login form, with the ability to make an API request to authenticate a user.
+
+The createSlice function from the @reduxjs/toolkit library is used to create the slice. The createAsyncThunk function is used to define an asynchronous thunk called loginUser, which sends a login request to the server using the post function from ../../../utils/axiosInstance. The thunk returns either the response or an error message, depending on the outcome of the request.
+
+The initial state of the login slice has properties for loading, success, user, errorMessage, and errorStrings. The extraReducers field is used to define reducer functions that handle the state changes in response to the different action types (pending, fulfilled, and rejected) that are dispatched when the loginUser thunk is run. These reducer functions are created using the addCase method of the builder object.
+
+When the loginUser.pending action is dispatched, the loading state is set to true. When loginUser.fulfilled is dispatched, loading is set to false and success is set to true, along with the user property being set to the payload of the action (which contains the authenticated user's information). Finally, when loginUser.rejected is dispatched, loading is set to false, success is set to false, and errorMessage and errorStrings are populated with the error message returned by the server.
+
+The code also exports various selectors to access specific fields of the state, such as selectLoginLoading, selectLoginSuccess, selectLoginUser, selectLoginErrorMessage, and selectLoginErrorStrings. A selectLoginError selector combines the errorMessage and errorStrings fields into a single object. Finally, the loginActions object is exported, which contains the action creators for the slice.
+
+*/ 
