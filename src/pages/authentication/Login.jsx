@@ -49,13 +49,11 @@ const Login = () => {
       if (formIsValid) {
         dispatch(loginUser({ email, password }))
           .then((response) => {
+            console.log(response)
             setLoading(false)
-
-            if (response.payload && response.payload.access_token) {
-              localStorage.setItem('token', response.payload.access_token)
+            if (response.payload && response.payload.data.access_token) {
+              localStorage.setItem('token', response.payload.data.access_token)
               navigate('/')
-            } else if (response.payload && response.payload.message) {
-              console.log(response.payload.message)
             } else {
               console.log('Invalid response')
             }
@@ -79,8 +77,6 @@ const Login = () => {
       setPasswordError,
     ]
   )
-
-
 
   return (
     <div className={styles['auth-container']}>

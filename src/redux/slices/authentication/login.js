@@ -4,8 +4,8 @@ import produce from 'immer'
 
 export const loginUser = createAsyncThunk('login', async (payload, thunkAPI) => {
   try {
-   const response = await post('/login', payload)
-   console.log('response:', response)
+    const response = await post('/login', payload)
+    console.log('response:', response)
     if (response.status === 200) {
       return response
     } else {
@@ -15,7 +15,6 @@ export const loginUser = createAsyncThunk('login', async (payload, thunkAPI) => 
     return thunkAPI.rejectWithValue(error.response.data)
   }
 })
-
 
 const initialState = {
   loading: false,
@@ -59,7 +58,6 @@ const loginSlice = createSlice({
           ).flat()
         })
       })
-
   },
 })
 

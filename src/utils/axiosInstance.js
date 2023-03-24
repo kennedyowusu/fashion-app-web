@@ -22,9 +22,9 @@ axiosInstance.interceptors.request.use(
 export const post = async (url, data) => {
   try {
     const response = await axiosInstance.post(url, data)
-    return response.data
+    return response
   } catch (error) {
-    return error.response.data
+    return error.response
   }
 }
 
